@@ -18,8 +18,6 @@ const app = express();
 app.use(express.static('public'));
 
 
-
-
 const dirPath = './public/text_files';
 
 //Route to get all textfile names from text_files folder
@@ -32,7 +30,6 @@ app.get("/", (req, res) => {
 
             //Filter only text files
             const textFiles = files.filter(file => path.extname(file) === '.txt');
-            console.log(textFiles)
            return  res.status(200).json({
                 "files": [...textFiles]
             })
@@ -58,16 +55,16 @@ app.get("/createFile", (req, res) => {
 
         ///Generate a file name
         const fileName = `${formatted}`;
-        console.log(fileName);
+        
 
         //Generate the file path
         const filePath = path.join(__dirname, `/public/text_files/${fileName}.txt`);
-        console.log(filePath);
+        
 
         //Generate the content of a file
         // Define the content to write into the file
         const content = `Current time is: ${new Date().toString()}`;
-        console.log(content)
+       
         fs.writeFile(filePath, content, (err) => {
             if (err) {
                 throw err;
@@ -77,7 +74,7 @@ app.get("/createFile", (req, res) => {
             }
         });
     } catch (error) {
-        console.log(error)
+       
         return res.status(500).json({ "Error": error });
     }
 
@@ -99,7 +96,7 @@ app.get("/send-zip", (req, res)=>{
 
         //Filter only text files
         const textFiles = files.filter(file => path.extname(file) === '.txt');
-        console.log(textFiles)
+       
         textFiles.forEach(file => {
             const filePath = `${folderPath}/${file}`;
             archive.append(fs.createReadStream(filePath), { name: file });
@@ -112,14 +109,14 @@ app.get("/send-zip", (req, res)=>{
         res.attachment(zipName);
         res.sendFile(zipName, { root: __dirname }, (err) => {
           if (err) {
-            console.error(err);
+           
             return res.status(500).send('Internal Server Error');
           }
   
           // Delete the zip file after it is downloaded
           fs.unlink(zipName, (err) => {
             if (err) {
-              console.error(err);
+             throw err;
             }
           });
         });
@@ -127,7 +124,9 @@ app.get("/send-zip", (req, res)=>{
     })
 
    } catch (error) {
-    
+        return res.status(500).json({
+            "Error":error
+        })
    }
         
 
