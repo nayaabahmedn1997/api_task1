@@ -1,11 +1,12 @@
 {
   "name": "assignment_1",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon app.js"
+    "watch": "nodemon app.js",
+    "start":"node app.js"
   },
   "keywords": [],
   "author": "",
